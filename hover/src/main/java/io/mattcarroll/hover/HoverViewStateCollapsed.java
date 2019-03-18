@@ -95,8 +95,8 @@ class HoverViewStateCollapsed extends BaseHoverViewState {
         }
         mDragListener = new FloatingTabDragListener(this);
         mIsCollapsed = false; // We're collapsing, not yet collapsed.
+        mHoverView.notifyListenersCollapsing();
         if (null != mListener) {
-            mHoverView.notifyListenersCollapsing();
             mListener.onCollapsing();
         }
         initDockPosition();
@@ -337,9 +337,11 @@ class HoverViewStateCollapsed extends BaseHoverViewState {
         boolean didJustCollapse = !mIsCollapsed;
         mIsCollapsed = true;
         mHoverView.saveVisualState();
+        if (didJustCollapse) {
+            mHoverView.notifyListenersCollapsed();
+        }
         if (null != mListener) {
             if (didJustCollapse) {
-                mHoverView.notifyListenersCollapsed();
                 mListener.onCollapsed();
             }
             mListener.onDocked();
